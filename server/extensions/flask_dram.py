@@ -1,6 +1,6 @@
 
 
-from typing import Optional, Union
+from typing import Optional, Union, cast
 from flask import Flask
 from requests_auth_aws_sigv4 import AWSSigV4 # type: ignore
 import requests
@@ -22,8 +22,23 @@ class DeviceRegistryAccessModel:
         self.api_version: str = app.config["DEV_REG_API_VERSION"]        
         
     def authorize_device_registry(self, login_request: dict[str,Union[str,int]]) -> requests.Response:
-        resp = requests.post(f"{self.base_url}/{self.api_version}/authorize", json=login_request)
         assert self.app is not None
+        resp = requests.post(f"{self.base_url}/{self.api_version}/authorize", json=login_request)
+        if resp.status_code == 200:
+            self.app.logger.info(login_request)
+            content = resp.json()
+            self.app.logger.info(resp.content)            
+            self.aws_auth=AWSSigV4(
+                service = cast(str, self.app.config["AWS_SERVICE"]),
+                aws_access_key_id = content["access_key"],
+                aws_secret_access_key = content["secret_access_key"],
+                aws_session_token = content["session_token"],
+                region = cast(str, self.app.config["AWS_REGION"])
+            )
+            self.init_done = True
+            self.key_expiration_time = time.time() + float(login_request["duration"])
+            self.flashing_sessions_remaining = int(login_request["flashing_sessions_limit"])
+            
         self.app.logger.info(f"Response Status Code: {resp.status_code}")
         return resp
     
