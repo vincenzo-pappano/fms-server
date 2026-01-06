@@ -1,8 +1,11 @@
 from .config import DevelopmentConfiguration
+from .fms_server import FmsServer
 
-print('Running')
-dev_config = DevelopmentConfiguration()
-print(dev_config.AWS_USERNAME)
-print(dev_config.AWS_PASSWORD)
-print(dev_config.HOST)
-print(dev_config.PORT)
+
+def main():
+
+    server = FmsServer(DevelopmentConfiguration())
+    server.logger.info("Main: FMS Server created")    
+    
+if __name__ == "__main__":
+    main()
