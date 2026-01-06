@@ -8,7 +8,7 @@ class BaseConfiguration:
     AWS_USERNAME: str | None = os.environ.get("AWS_USERNAME", "MISSING_USERNAME")
     AWS_PASSWORD: str | None = os.environ.get("AWS_PASSWORD", "MISSING_USERNAME")
     AWS_DURATION: int = 43200
-    AWS_LIMIT: int = 8
+    AWS_FLASHING_LIMIT: int = 8
     AWS_REGION: str = "us-east-1"
     AWS_SERVICE: str = "execute-api"
 
