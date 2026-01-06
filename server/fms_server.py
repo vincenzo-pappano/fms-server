@@ -1,8 +1,8 @@
 from flask import Flask
-from .config import BaseConfiguration, DevelopmentConfiguration
-from .handlers.health_handler import HealthHandler
-from .handlers.authorize_handler import AuthorizeHandler
-
+from server.config import BaseConfiguration, DevelopmentConfiguration
+from server.handlers.health_handler import HealthHandler
+from server.handlers.authorize_handler import AuthorizeHandler
+from server.extensions import dram
 
 class FmsServer(Flask):
 
@@ -13,6 +13,8 @@ class FmsServer(Flask):
         
         self.health_handler = HealthHandler()
         self.authorize_handler = AuthorizeHandler()
+        
+        dram.init_app(self)
         
         self.register_routes()
         

@@ -2,7 +2,7 @@ import os
 
 class BaseConfiguration:
 
-    DEV_REG_BASE_URL: str = "ext-api.device-registry.i2p2.iotecha.com"
+    DEV_REG_BASE_URL: str = "https://ext-api.device-registry.i2p2.iotecha.com"
     DEV_REG_API_VERSION: str = "v1"
 
     AWS_USERNAME: str | None = os.environ.get("AWS_USERNAME", "MISSING_USERNAME")
